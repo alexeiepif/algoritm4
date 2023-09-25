@@ -20,19 +20,19 @@ def findmax():
     return max
 
 
-def create_graph(b, c, aur, bur):
+def create_graph(b, c, aur, bur, namegraph):
     plt.scatter(b, c, s=5)
     y_line = aur * np.array(b) + bur
     plt.plot(b, y_line, color='red')
-    plt.title("График")
-    plt.xlabel("X-ось")
-    plt.ylabel("Y-ось")
+    plt.title(namegraph)
+    plt.xlabel("Размер массива")
+    plt.ylabel("Время работы функции")
     correlation_coefficient = np.corrcoef(c, b)[0, 1]
     return correlation_coefficient
 
 
 correlation_v = []
-# Цикл нужен для создания двух графиков, один при среднем случае, второй при худшем
+# Цикл нужен для создания двух графиков, один при минимуме, второй при максимуме
 for namegraph in ["Минимум", "Максимум"]:
     x = [i for i in range(10, 10001, 10)]
     time = []
@@ -42,11 +42,11 @@ for namegraph in ["Минимум", "Максимум"]:
     if namegraph == "Минимум":
         for i in x:
             a = [rnd.randint(0, randmax) for j in range(i)]
-            time.append((timeit.timeit(lambda: findmin(), number=20))/20)
+            time.append((timeit.timeit(lambda: findmin(), number=50))/50)
     else:
         for i in x:
             a = [rnd.randint(0, randmax) for j in range(i)]
-            time.append((timeit.timeit(lambda: findmax(), number=20))/20)
+            time.append((timeit.timeit(lambda: findmax(), number=50))/50)
 
     # Вычисление коэффицентов в системе уравнений метода наименьших квдратов
     sx = sum(x)
@@ -65,8 +65,10 @@ for namegraph in ["Минимум", "Максимум"]:
     aur = (stime - bur*n)/sx
     # Создание графических окон
     plt.figure(namegraph)
+    plt.subplots_adjust(left=0.2)
+
     # Создание графиков
-    correlation_v.append(create_graph(x, time, aur, bur))
+    correlation_v.append(create_graph(x, time, aur, bur, namegraph))
 
 print("Коэффициент корреляции в первом случае =",
       correlation_v[0], "\nа во втором случае =", correlation_v[1])
