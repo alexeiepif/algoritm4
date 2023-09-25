@@ -1,5 +1,4 @@
 import random as rnd
-
 import matplotlib.pyplot as plt
 import numpy as np
 import timeit
@@ -43,13 +42,13 @@ for namegraph in ["Минимум", "Максимум"]:
     if namegraph == "Минимум":
         for i in x:
             a = [rnd.randint(0, randmax) for j in range(i)]
-            time.append(timeit.timeit(lambda: findmin(), number=10)/10)
+            time.append((timeit.timeit(lambda: findmin(), number=20))/20)
     else:
         for i in x:
             a = [rnd.randint(0, randmax) for j in range(i)]
-            time.append(timeit.timeit(lambda: findmax(), number=10)/10)
+            time.append((timeit.timeit(lambda: findmax(), number=20))/20)
 
-    # Вычисление коэффицентов в системе уравнений метода наименьших квадратов
+    # Вычисление коэффицентов в системе уравнений метода наименьших квдратов
     sx = sum(x)
     stime = sum(time)
     sx2 = sum(i**2 for i in x)
