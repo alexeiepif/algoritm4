@@ -5,11 +5,19 @@ import numpy as np
 import timeit
 
 
-def find(a, b, len):
+def findmin(a, maxitem, len):
+    min = maxitem
     for i in range(len):
-        if b == a[i]:
-            return i
-    return -1
+        if min > a[i]:
+            min = a[i]
+    return min
+
+def findmax(a, len):
+    max = 0
+    for i in range(len):
+        if max < a[i]:
+            max = a[i]
+    return max
 
 
 def create_graph(b, c, aur, bur):
@@ -24,13 +32,13 @@ def create_graph(b, c, aur, bur):
     plt.ylabel("Y-ось")
     plt.xticks(x_values)
     plt.yticks(y_values)
-    correlation_coefficient = np.corrcoef(c, y_line)[0, 1]
+    correlation_coefficient = np.corrcoef(c, b)[0, 1]
     return correlation_coefficient
 
 
 correlation_v = []
 # Цикл нужен для создания двух графиков, один при среднем случае, второй при худшем
-for namegraph in ["Средний", "Худший"]:
+for namegraph in ["Минимум", "Максимум"]:
     x = []
     time = []
     x2 = []
@@ -38,14 +46,12 @@ for namegraph in ["Средний", "Худший"]:
     randmax = 1000000
     for i in range(10, 10001, 10):
         x.append(i)
-        a = [rnd.randint(1, randmax) for j in range(i)]
-        if namegraph == "Средний":
-            b = a[rnd.randint(1, len(a)-1)]
+        a = [rnd.randint(0, randmax) for j in range(i)]
+        if namegraph == "Минимум":
+            timer = timeit.timeit(lambda: findmin(a, randmax, i), number=1)
         else:
-            b = randmax+1
-        timer = timeit.timeit(lambda: find(a, b, i), number=1)
+            timer = timeit.timeit(lambda: findmin(a, randmax, i), number=1)
         time.append(timer)
-        index = find(a, b, i)
 
     for i, j in zip(x, time):
         x2.append(i**2)
